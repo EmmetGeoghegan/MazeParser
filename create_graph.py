@@ -122,3 +122,25 @@ print("==================")
 #
 # dg.draw_graph_mplib(Nodes.all_Nodes, all_connections)
 
+Nodes.setSink(Nodes.all_Nodes[-1])
+Nodes.setSource(Nodes.all_Nodes[0])
+
+
+def explore_tree(node):
+    for i in node.neighbors:
+        print(node.name, i.name, i.PrvNode, [kk.name for kk in node.neighbors])
+        if i.name != node.PrvNode.name:
+            node.nextnodes.append(i)
+            i.PrvNode = node
+            explore_tree(i)
+
+
+start_node = Nodes.all_Nodes[0]
+explore_tree(start_node)
+start_node = Nodes.all_Nodes[0].PrvNode = Nodes.all_Nodes[0]
+
+print("-------------------")
+print("-------------------")
+
+for i in Nodes.all_Nodes:
+    print(i.name, i.PrvNode.name, [j.name for j in i.nextnodes])
