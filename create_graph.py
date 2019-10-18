@@ -79,32 +79,45 @@ def explore_tree(node):
 def find_whitespace(maze):
     whitespace = []
     for rownum, row in enumerate(test_maze):
-        for colnum, entry in enumerate(i):
+        for colnum, entry in enumerate(row):
             if entry == "o":
                 whitespace.append([rownum, colnum])
     return whitespace
 
 
-print("------------------")
-print("Finding Whitespace")
-print("------------------")
-o_loc = find_whitespace(test_maze)
+def make_nodes(whitespace):
+    for NodeID, i in enumerate(whitespace):
+        Nodes(i, NodeID)
 
-for name, i in enumerate(o_loc):
-    Nodes(i, name)
+# Find whitespace in the maze and make our nodes
+print("-----------------------------------")
+print("Finding Whitespace and Making Nodes")
+print("-----------------------------------")
+print("")
 
+tstart = time.time()
+make_nodes(find_whitespace(test_maze))
+tend = time.time()
+
+print("----")
+print("Done")
+print("----")
+print(f"Took {round(tend-tstart, 2)} seconds")
+
+def find_adjacent_nodes(AllNodes):
+    
 for i in Nodes.all_Nodes:
-    print(f"Source: ({i.xpos},{i.ypos}) NAME:{i.name}")
+    # print(f"Source: ({i.xpos},{i.ypos}) NAME:{i.name}")
     for j in Nodes.all_Nodes:
         if i != j:
             if (0 <= abs(i.xpos-j.xpos) <= 1):
                 if (0 <= abs(i.ypos-j.ypos) <= 1):
                     if abs(i.xpos-j.xpos) != abs(i.ypos-j.ypos):
-                        print(f"------Adjacent({j.xpos},{j.ypos})")
+                        # print(f"------Adjacent({j.xpos},{j.ypos})")
                         i.AddNeighbor(j)
 
-print("==================")
-print("==================")
+print("")
+print("")
 
 all_connections = []
 for i in Nodes.all_Nodes:
@@ -145,13 +158,6 @@ tend = time.time()
 print("-------------------")
 print("Tree Explored Fully")
 print("-------------------")
-
-for i in Nodes.all_Nodes:
-    print(i.name, i.PrvNode.name, [j.name for j in i.nextnodes])
-
-print("-------------------")
-print("-------------------")
-
 print(f"Took {round(tend-tstart, 2)} seconds")
 print("")
 for i in Nodes.all_Nodes:
