@@ -47,6 +47,27 @@ class Nodes:
     def setSink(self):
         self.Sink = 1
 
+    def PrintAllNeighbor(self):
+        all_neighbors = ", ".join([str(i.name) for i in self.nextnodes])
+        if len(all_neighbors) == 0:
+            return("None")
+        return all_neighbors
+
+    def nodeinfo(self):
+        print("=======================================")
+        print(f"Node Name: {self.name}")
+        if self.Source > 0:
+            print("Type: Source Node")
+        elif self.Sink > 0:
+            print("Type: Sink Node")
+        elif len(self.nextnodes) == 0:
+            print("Type: End Node")
+        else:
+            print("Type: Normal Node")
+        print(f"Previous Node: {self.PrvNode.name}")
+        print(f"Next Nodes: {self.PrintAllNeighbor()}")
+        print("=======================================")
+
 for index, i in enumerate(test_maze):
     layer += 1
     for jindex, j in enumerate(i):
