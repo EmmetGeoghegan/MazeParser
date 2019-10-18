@@ -89,76 +89,110 @@ def make_nodes(whitespace):
     for NodeID, i in enumerate(whitespace):
         Nodes(i, NodeID)
 
-# Find whitespace in the maze and make our nodes
-print("-----------------------------------")
-print("Finding Whitespace and Making Nodes")
-print("-----------------------------------")
-print("")
-
-tstart = time.time()
-make_nodes(find_whitespace(test_maze))
-tend = time.time()
-
-print("----")
-print("Done")
-print("----")
-print(f"Took {round(tend-tstart, 2)} seconds")
 
 def find_adjacent_nodes(AllNodes):
-    
-for i in Nodes.all_Nodes:
-    # print(f"Source: ({i.xpos},{i.ypos}) NAME:{i.name}")
-    for j in Nodes.all_Nodes:
-        if i != j:
-            if (0 <= abs(i.xpos-j.xpos) <= 1):
-                if (0 <= abs(i.ypos-j.ypos) <= 1):
-                    if abs(i.xpos-j.xpos) != abs(i.ypos-j.ypos):
-                        # print(f"------Adjacent({j.xpos},{j.ypos})")
-                        i.AddNeighbor(j)
+    for i in AllNodes:
+        for j in AllNodes:
+            if i != j:
+                if (0 <= abs(i.xpos-j.xpos) <= 1):
+                    if (0 <= abs(i.ypos-j.ypos) <= 1):
+                        if abs(i.xpos-j.xpos) != abs(i.ypos-j.ypos):
+                            i.AddNeighbor(j)
 
-print("")
-print("")
+def get_paths(Node):
+    all_paths = []
+    for i in Node.nextnodes:
+        all_paths.append((Node.name, i.name))
+    return all_paths
 
-all_connections = []
-for i in Nodes.all_Nodes:
-    for j in i.neighbors:
-        # if (j.name, i.name) not in all_connections:
-        all_connections.append((i.name, j.name))
-print(all_connections)
+def main():
+    # Find whitespace in the maze and make our nodes
+    print("-----------------------------------")
+    print("Finding Whitespace and Making Nodes")
+    print("-----------------------------------")
+    print("")
 
-print("==================")
-print("==================")
+    tstart = time.time()
+    make_nodes(find_whitespace(test_maze))
+    tend = time.time()
 
-uselessnodes = []
-for i in Nodes.all_Nodes:
-    if len(i.neighbors) == 2:
-        print(f"Node {i.name} is useless")
+    print("----")
+    print("Done")
+    print("----")
+    print(f"Took {round(tend-tstart, 2)} seconds")
 
-print("==================")
-print("==================")
+    find_adjacent_nodes(Nodes.all_Nodes)
 
-# TODO: Add node removal method
-# TODO: Add remapping after node removal method
+    print("")
+    print("")
 
-# dg.draw_graph_mplib(Nodes.all_Nodes, all_connections)
+    all_connections = []
+    for i in Nodes.all_Nodes:
+        for j in i.neighbors:
+            # if (j.name, i.name) not in all_connections:
+            all_connections.append((i.name, j.name))
+    print(all_connections)
 
-Nodes.setSink(Nodes.all_Nodes[-1])
-Nodes.setSource(Nodes.all_Nodes[0])
+    print("==================")
+    print("==================")
 
-print("-------------------------")
-print("Starting Tree Exploration")
-print("-------------------------")
-print("")
-tstart = time.time()
+    uselessnodes = []
+    for i in Nodes.all_Nodes:
+        if len(i.neighbors) == 2:
+            print(f"Node {i.name} is useless")
 
-start_node = Nodes.all_Nodes[0]
-explore_tree(start_node)
+    print("==================")
+    print("==================")
 
-tend = time.time()
-print("-------------------")
-print("Tree Explored Fully")
-print("-------------------")
-print(f"Took {round(tend-tstart, 2)} seconds")
-print("")
-for i in Nodes.all_Nodes:
-    Nodes.nodeinfo(i)
+
+    Nodes.setSink(Nodes.all_Nodes[-1])
+    Nodes.setSource(Nodes.all_Nodes[0])
+
+    print("-------------------------")
+    print("Starting Tree Exploration")
+    print("-------------------------")
+    print("")
+    tstart = time.time()
+
+    start_node = Nodes.all_Nodes[0]
+    explore_tree(start_node)
+
+    tend = time.time()
+    print("-------------------")
+    print("Tree Explored Fully")
+    print("-------------------")
+    print(f"Took {round(tend-tstart, 2)} seconds")
+    print("")
+
+    # Get all node info
+    all_paths = []
+    for i in Nodes.all_Nodes:
+        Nodes.nodeinfo(i)
+        print("")
+        all_paths += get_paths(i)
+
+    print(all_paths)
+
+    dg.draw_graph_mplib(Nodes.all_Nodes, all_connections)
+    dg.draw_graph_mplib(Nodes.all_Nodes, all_paths)
+
+    # def dfsTree(node):
+    #     all_paths = []
+    #     # TODO: exit clause
+    #     if len(node.neighbors) == 0:
+    #         pass
+    #
+    #     # TODO: dfs algo
+    #     for i in node.neighbors:
+    #         pass
+    #
+    #     # This is the tree explorer
+    #     for i in node.neighbors:
+    #         if i.name != node.PrvNode.name:
+    #             node.nextnodes.append(i)
+    #             i.PrvNode = node
+    #             explore_tree(i)
+
+    print(dfsTree(Nodes.all_Nodes[0]))
+
+main()
