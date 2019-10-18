@@ -155,3 +155,9 @@ print("-------------------")
 
 for i in Nodes.all_Nodes:
     print(i.name, i.PrvNode.name, [j.name for j in i.nextnodes])
+
+print("-------------------")
+print("-------------------")
+
+for i in Nodes.all_Nodes:
+    Nodes.nodeinfo(i)
