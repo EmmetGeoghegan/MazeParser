@@ -31,7 +31,6 @@ class Nodes:
         self.Source = 0
         self.Sink = 0
 
-
     def AddNeighbor(self, node):
         self.neighbors.append(node)
 
@@ -130,17 +129,9 @@ for i in Nodes.all_Nodes:
 print("==================")
 print("==================")
 
-# for i in Nodes.all_Nodes:
-#     print(i.name)
-
-# TODO: Re-factor the class structure to make a linked list
 # TODO: Add node removal method
 # TODO: Add remapping after node removal method
 
-# dg.draw_graph_mplib(Nodes.all_Nodes, all_connections)
-#
-# all_connections = [(0,2),(2,3),(2,5),(5,8),(8,9),(8,7),(7,6),(6,4),(4,1),(8,10),(10,13),(13,14),(13,12),(12,11),(11,15)]
-#
 # dg.draw_graph_mplib(Nodes.all_Nodes, all_connections)
 
 Nodes.setSink(Nodes.all_Nodes[-1])
@@ -158,7 +149,6 @@ def explore_tree(node):
 
 start_node = Nodes.all_Nodes[0]
 explore_tree(start_node)
-start_node = Nodes.all_Nodes[0].PrvNode = Nodes.all_Nodes[0]
 
 print("-------------------")
 print("-------------------")
