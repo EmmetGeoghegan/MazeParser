@@ -115,3 +115,10 @@ print("==================")
 # TODO: Re-factor the class structure to make a linked list
 # TODO: Add node removal method
 # TODO: Add remapping after node removal method
+
+# dg.draw_graph_mplib(Nodes.all_Nodes, all_connections)
+#
+# all_connections = [(0,2),(2,3),(2,5),(5,8),(8,9),(8,7),(7,6),(6,4),(4,1),(8,10),(10,13),(13,14),(13,12),(12,11),(11,15)]
+#
+# dg.draw_graph_mplib(Nodes.all_Nodes, all_connections)
+
