@@ -1,4 +1,5 @@
 import display_graph as dg
+import time
 
 test_maze = [
             ["x", "x", "x", "o", "x", "x"],
@@ -94,6 +95,13 @@ for index, i in enumerate(test_maze):
 print("==================")
 print("==================")
 print(o_loc)
+def explore_tree(node):
+    for i in node.neighbors:
+        if i.name != node.PrvNode.name:
+            node.nextnodes.append(i)
+            i.PrvNode = node
+            explore_tree(i)
+
 
 for name, i in enumerate(o_loc):
     Nodes(i, name)
@@ -137,20 +145,18 @@ print("==================")
 Nodes.setSink(Nodes.all_Nodes[-1])
 Nodes.setSource(Nodes.all_Nodes[0])
 
-
-def explore_tree(node):
-    for i in node.neighbors:
-        print(node.name, i.name, i.PrvNode, [kk.name for kk in node.neighbors])
-        if i.name != node.PrvNode.name:
-            node.nextnodes.append(i)
-            i.PrvNode = node
-            explore_tree(i)
-
+print("-------------------------")
+print("Starting Tree Exploration")
+print("-------------------------")
+print("")
+tstart = time.time()
 
 start_node = Nodes.all_Nodes[0]
 explore_tree(start_node)
 
+tend = time.time()
 print("-------------------")
+print("Tree Explored Fully")
 print("-------------------")
 
 for i in Nodes.all_Nodes:
@@ -159,5 +165,7 @@ for i in Nodes.all_Nodes:
 print("-------------------")
 print("-------------------")
 
+print(f"Took {round(tend-tstart, 2)} seconds")
+print("")
 for i in Nodes.all_Nodes:
     Nodes.nodeinfo(i)
