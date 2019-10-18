@@ -13,7 +13,6 @@ test_maze = [
 
 layer = -1
 o_loc = []
-print(len(test_maze))
 
 
 class Nodes:
@@ -68,33 +67,7 @@ class Nodes:
         print(f"Next Nodes: {self.PrintAllNeighbor()}")
         print("=======================================")
 
-for index, i in enumerate(test_maze):
-    layer += 1
-    for jindex, j in enumerate(i):
-        if j == "o":
-            print("o found")
-            print(f"o_loc{(index,jindex)}")
-            print(layer, len(test_maze), index)
-            # check left
-            if test_maze[layer][index-1] == "o":
-                print("Something to the left")
-            # check right
-            if test_maze[layer][index-1] == "o":
-                print("Something to the right")
-            # check up
-            if layer != 0:
-                print(layer, index)
-                if test_maze[layer-1][index-1] == "o":
-                    print("Something above")
-            # check down
-            if layer != len(test_maze)-1:
-                if test_maze[layer+1][index-1] == "o":
-                    print("Something below")
-            o_loc.append([index, jindex])
 
-print("==================")
-print("==================")
-print(o_loc)
 def explore_tree(node):
     for i in node.neighbors:
         if i.name != node.PrvNode.name:
@@ -102,6 +75,20 @@ def explore_tree(node):
             i.PrvNode = node
             explore_tree(i)
 
+
+def find_whitespace(maze):
+    whitespace = []
+    for rownum, row in enumerate(test_maze):
+        for colnum, entry in enumerate(i):
+            if entry == "o":
+                whitespace.append([rownum, colnum])
+    return whitespace
+
+
+print("------------------")
+print("Finding Whitespace")
+print("------------------")
+o_loc = find_whitespace(test_maze)
 
 for name, i in enumerate(o_loc):
     Nodes(i, name)
