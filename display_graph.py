@@ -16,14 +16,20 @@ def draw_graph_mplib(nodes, connections):
         for j in i.neighbors:
             all_connections.append((i.name, j.name))
     """
+    # Init graph object
     G = nx.MultiDiGraph()
+    # Add our nodes
     G.add_nodes_from([i.name for i in nodes])
+    # Add our edges
     G.add_edges_from(connections)
+
+    # Labeling and coloring graph
     node_colors = ["green"]+["blue"]*(len(nodes)-2) + ["red"]
 
     labels = {}
     for index, i in enumerate(nodes):
         labels[index] = i.name
 
+    # Create and display the graph
     nx.draw(G, node_color=node_colors, labels=labels, with_labels=True)
     plt.show()
