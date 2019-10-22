@@ -3,10 +3,10 @@ import cv2
 
 def generate_text_maze(image):
     # Read in the image into memory
-    image = cv2.imread(image)
+    image = cv2.imread(f".//mazes//{image}")
     # Maze container
     maze = []
-
+    # print(image.shape[0])
     # Loop through maze and get pixel values
     for row in range(image.shape[0]):
         # Maze row container
