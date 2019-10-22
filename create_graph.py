@@ -14,14 +14,17 @@ test_maze = [
 
 layer = -1
 o_loc = []
-# test_maze = im.generate_text_maze("21x21.bmp")
+test_maze = im.generate_text_maze("21x21.bmp")
+
 
 class Graph:
     all_Nodes = []
+    all_Useful_Nodes = []
 
     def __init__(self, position, name):
         Graph.all_Nodes.append(self)
         self.name = name
+        self.remove = 0
         self.xpos = position[0]
         self.ypos = position[1]
 
@@ -47,6 +50,9 @@ class Graph:
     def setSource(self):
         self.Source = 1
 
+    def markforremoval(self):
+        self.remove = 1
+
     def setSink(self):
         self.Sink = 1
 
@@ -67,7 +73,7 @@ class Graph:
             print("Type: End Node")
         else:
             print("Type: Normal Node")
-        print(f"Previous Node: {self.PrvNode.name}")
+        print(f"Previous Node: {self.PrvNode}")
         print(f"Next Nodes: {self.PrintAllNeighbor()}")
         print("=======================================")
 
@@ -107,7 +113,7 @@ def find_adjacent_nodes(AllNodes):
 def get_paths(Node):
     all_paths = []
     for i in Node.nextnodes:
-        all_paths.append((str(Node.name), str(i.name)))
+        all_paths.append(((Node.name), (i.name)))
     return all_paths
 
 
@@ -142,10 +148,6 @@ def main():
     print("==================")
     print("==================")
 
-    for i in Graph.all_Nodes:
-        if len(i.neighbors) == 2:
-            print(f"Node {i.name} is useless")
-
     print("==================")
     print("==================")
 
@@ -168,17 +170,39 @@ def main():
     print(f"Took {round(tend-tstart, 2)} seconds")
     print("")
 
+    Graph.all_Useful_Nodes = Graph.all_Nodes
+    for i in Graph.all_Useful_Nodes:
+        if len(i.neighbors) == 2:
+            print(f"Node {i.name} is useless")
+            print(i.PrvNode, i.nextnodes)
+            print(i.PrvNode.nextnodes)
+            print("Before", i.PrvNode.nextnodes)
+            i.PrvNode.nextnodes.remove(i)
+            i.PrvNode.nextnodes.append(i.nextnodes[0])
+            print("After", i.PrvNode.nextnodes)
+
+            i.nextnodes[0].PrvNode = i.PrvNode
+            i.PrvNode = None
+            i.nextnodes = []
+            Graph.markforremoval(i)
+            print(f"Node {i.name} Removed")
+
+    Graph.all_Useful_Nodes = [i for i in Graph.all_Useful_Nodes if i.remove == 0]
     # Get all node info
     all_paths = []
-    for i in Graph.all_Nodes:
+    for i in Graph.all_Useful_Nodes:
         Graph.nodeinfo(i)
         print("")
         all_paths += get_paths(i)
 
+    print(all_connections)
+    print("===")
     print(all_paths)
 
-    dg.draw_graph_mplib(Graph.all_Nodes, all_connections)
-    # dg.draw_graph_mplib(Graph.all_Nodes, all_paths)
+    for i in Graph.all_Useful_Nodes:
+        Graph.nodeinfo(i)
+    # dg.draw_graph_mplib(Graph.all_Nodes, all_connections)
+    dg.draw_graph_mplib(Graph.all_Useful_Nodes, all_paths)
     # dg.draw_graphviz(Graph.all_Nodes, all_paths)
     # dg.draw_networkx(all_paths)
     # for i in Graph.all_Nodes:
