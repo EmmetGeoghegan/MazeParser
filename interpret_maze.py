@@ -23,3 +23,18 @@ def generate_text_maze(image):
         maze.append(maze_row)
     return maze
 
+
+def main():
+    filename = input("Please enter filename (with extension): ")
+    try:
+        maze = generate_text_maze(filename)
+        for i in maze:
+            print(str("".join(i)))
+
+    except Exception:
+        print("Invalid file name")
+        main()
+
+
+if __name__ == "__main__":
+    main()
