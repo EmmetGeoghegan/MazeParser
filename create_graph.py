@@ -32,6 +32,9 @@ class Graph:
         self.Source = 0
         self.Sink = 0
 
+    def __repr__(self):
+        return str(self.name)
+
     def AddNeighbor(self, node):
         self.neighbors.append(node)
 
