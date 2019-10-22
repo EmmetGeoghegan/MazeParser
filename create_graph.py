@@ -173,26 +173,26 @@ def main():
 
     print(all_paths)
 
-    dg.draw_graph_mplib(Nodes.all_Nodes, all_connections)
-    dg.draw_graph_mplib(Nodes.all_Nodes, all_paths)
+    dg.draw_graph_mplib(Graph.all_Nodes, all_connections)
+    dg.draw_graph_mplib(Graph.all_Nodes, all_paths)
+    dg.draw_graphviz(Graph.all_Nodes, all_paths)
 
-    # def dfsTree(node):
-    #     all_paths = []
-    #     # TODO: exit clause
-    #     if len(node.neighbors) == 0:
-    #         pass
-    #
-    #     # TODO: dfs algo
-    #     for i in node.neighbors:
-    #         pass
-    #
-    #     # This is the tree explorer
-    #     for i in node.neighbors:
-    #         if i.name != node.PrvNode.name:
-    #             node.nextnodes.append(i)
-    #             i.PrvNode = node
-    #             explore_tree(i)
 
-    print(dfsTree(Nodes.all_Nodes[0]))
+def dfs_paths(All_Nodes, start, end, path=[]):
+    path = path + [start]
+    if start == end:
+        return [path]
+    paths = []
+    for node in start.nextnodes:
+        if node not in path:
+            newpaths = dfs_paths(All_Nodes, node, end, path)
+            for newpath in newpaths:
+                paths.append(newpath)
+    return paths
+
 
 main()
+
+paths = (dfs_paths(Graph.all_Nodes, Graph.all_Nodes[0], Graph.all_Nodes[-1]))
+
+print(paths)
