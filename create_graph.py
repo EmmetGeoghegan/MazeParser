@@ -113,7 +113,8 @@ def find_adjacent_nodes(AllNodes):
 def get_paths(Node):
     all_paths = []
     for i in Node.nextnodes:
-        all_paths.append(((Node.name), (i.name)))
+        all_paths.append([(Node.name), (i.name)])  # Networkx
+
     return all_paths
 
 
@@ -184,16 +185,18 @@ def main():
             i.nextnodes[0].PrvNode = i.PrvNode
             i.PrvNode = None
             i.nextnodes = []
-            Graph.markforremoval(i)
+            # Graph.markforremoval(i)
             print(f"Node {i.name} Removed")
 
     Graph.all_Useful_Nodes = [i for i in Graph.all_Useful_Nodes if i.remove == 0]
     # Get all node info
     all_paths = []
-    for i in Graph.all_Useful_Nodes:
+    for i in Graph.all_Nodes:
         Graph.nodeinfo(i)
         print("")
         all_paths += get_paths(i)
+    input()
+    all_paths.sort(key=lambda x: x[1])
 
     print(all_connections)
     print("===")
@@ -201,13 +204,7 @@ def main():
 
     for i in Graph.all_Useful_Nodes:
         Graph.nodeinfo(i)
-    # dg.draw_graph_mplib(Graph.all_Nodes, all_connections)
-    dg.draw_graph_mplib(Graph.all_Useful_Nodes, all_paths)
-    # dg.draw_graphviz(Graph.all_Nodes, all_paths)
-    # dg.draw_networkx(all_paths)
-    # for i in Graph.all_Nodes:
-    #     print([i,i.PrvNode])
-    # dg.render_tree(Graph.all_Nodes)
+    dg.draw_network(all_paths)
 
 
 def dfs_paths(All_Nodes, start, end, path=[]):
