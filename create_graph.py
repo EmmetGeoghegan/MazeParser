@@ -1,4 +1,5 @@
 import display_graph as dg
+import interpret_maze as im
 import time
 
 test_maze = [
@@ -13,13 +14,13 @@ test_maze = [
 
 layer = -1
 o_loc = []
+test_maze = im.generate_text_maze("21x21.bmp")
 
-
-class Nodes:
+class Graph:
     all_Nodes = []
 
     def __init__(self, position, name):
-        Nodes.all_Nodes.append(self)
+        Graph.all_Nodes.append(self)
         self.name = name
         self.xpos = position[0]
         self.ypos = position[1]
@@ -27,7 +28,7 @@ class Nodes:
         self.neighbors = []
         self.nextnodes = []
 
-        self.PrvNode = Nodes.all_Nodes[0]
+        self.PrvNode = Graph.all_Nodes[0]
         self.Source = 0
         self.Sink = 0
 
@@ -87,7 +88,7 @@ def find_whitespace(maze):
 
 def make_nodes(whitespace):
     for NodeID, i in enumerate(whitespace):
-        Nodes(i, NodeID)
+        Graph(i, NodeID)
 
 
 def find_adjacent_nodes(AllNodes):
@@ -99,11 +100,13 @@ def find_adjacent_nodes(AllNodes):
                         if abs(i.xpos-j.xpos) != abs(i.ypos-j.ypos):
                             i.AddNeighbor(j)
 
+
 def get_paths(Node):
     all_paths = []
     for i in Node.nextnodes:
-        all_paths.append((Node.name, i.name))
+        all_paths.append((str(Node.name), str(i.name)))
     return all_paths
+
 
 def main():
     # Find whitespace in the maze and make our nodes
@@ -121,13 +124,13 @@ def main():
     print("----")
     print(f"Took {round(tend-tstart, 2)} seconds")
 
-    find_adjacent_nodes(Nodes.all_Nodes)
+    find_adjacent_nodes(Graph.all_Nodes)
 
     print("")
     print("")
 
     all_connections = []
-    for i in Nodes.all_Nodes:
+    for i in Graph.all_Nodes:
         for j in i.neighbors:
             # if (j.name, i.name) not in all_connections:
             all_connections.append((i.name, j.name))
@@ -136,17 +139,15 @@ def main():
     print("==================")
     print("==================")
 
-    uselessnodes = []
-    for i in Nodes.all_Nodes:
+    for i in Graph.all_Nodes:
         if len(i.neighbors) == 2:
             print(f"Node {i.name} is useless")
 
     print("==================")
     print("==================")
 
-
-    Nodes.setSink(Nodes.all_Nodes[-1])
-    Nodes.setSource(Nodes.all_Nodes[0])
+    Graph.setSink(Graph.all_Nodes[-1])
+    Graph.setSource(Graph.all_Nodes[0])
 
     print("-------------------------")
     print("Starting Tree Exploration")
@@ -154,7 +155,7 @@ def main():
     print("")
     tstart = time.time()
 
-    start_node = Nodes.all_Nodes[0]
+    start_node = Graph.all_Nodes[0]
     explore_tree(start_node)
 
     tend = time.time()
@@ -166,8 +167,8 @@ def main():
 
     # Get all node info
     all_paths = []
-    for i in Nodes.all_Nodes:
-        Nodes.nodeinfo(i)
+    for i in Graph.all_Nodes:
+        Graph.nodeinfo(i)
         print("")
         all_paths += get_paths(i)
 
