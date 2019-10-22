@@ -32,3 +32,23 @@ def draw_network(connections):
     # Draw the graph
     nx.draw(G, pos=pos, node_size=100, node_color=carac['myvalue'], with_labels=True)  # , node_color="skyblue")
     plt.show()
+
+
+def main():
+    print("This script will display any network given")
+    print("Please define your network as a list of edges")
+    print("Ensure the source is the lowest number and the sink is the highest number")
+    print("eg: [[0,1], [1,7], [6,5], [1,6], [5,7]] (0 would be the source and 7 the sink)")
+
+    connections = eval(input("Enter here:"))
+    connections.sort(key=lambda x: x[1])
+
+    try:
+        draw_network(connections)
+    except Exception as e:
+        print(e)
+        input()
+
+
+if __name__ == '__main__':
+    main()
