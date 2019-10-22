@@ -14,7 +14,7 @@ test_maze = [
 
 layer = -1
 o_loc = []
-test_maze = im.generate_text_maze("21x21.bmp")
+# test_maze = im.generate_text_maze("21x21.bmp")
 
 class Graph:
     all_Nodes = []
@@ -178,8 +178,12 @@ def main():
     print(all_paths)
 
     dg.draw_graph_mplib(Graph.all_Nodes, all_connections)
-    dg.draw_graph_mplib(Graph.all_Nodes, all_paths)
-    dg.draw_graphviz(Graph.all_Nodes, all_paths)
+    # dg.draw_graph_mplib(Graph.all_Nodes, all_paths)
+    # dg.draw_graphviz(Graph.all_Nodes, all_paths)
+    # dg.draw_networkx(all_paths)
+    # for i in Graph.all_Nodes:
+    #     print([i,i.PrvNode])
+    # dg.render_tree(Graph.all_Nodes)
 
 
 def dfs_paths(All_Nodes, start, end, path=[]):
