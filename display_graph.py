@@ -3,18 +3,19 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 
+def draw_networkx(connections):
+    print("====")
+    print(connections)
+    print("-")
+    con_from = []
+    con_to = []
+    for i in connections:
+        con_from.append(i[0])
+        con_to.append(i[1])
+    df = pd.DataFrame({"from": con_from, "to": con_to})
 
-    # Labeling and coloring graph
-    node_colors = ["green"]+["lightblue"]*(len(nodes)-2) + ["red"]
-
-    labels = {}
-    for index, i in enumerate(nodes):
-        labels[i.name] = i.name
-    print(labels)
-
-    nx.draw(G, node_color=node_colors, labels=labels)  # , node_color=node_colors, labels=labels, with_labels=True)
-    plt.show()
-
+    G = nx.from_pandas_edgelist(df, "from", "to")
+    pos = nx.planar_layout(G)
 
     node_colors = ["green"]+["skyblue"]*(len(G.nodes())-2) + ["red"]
 
