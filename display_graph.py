@@ -1,6 +1,8 @@
 import networkx as nx
 import matplotlib.pyplot as plt
 
+from graphviz import Digraph
+
 
 # Graph display function basic implimentation to check graph logic is sound
 def draw_graph_mplib(nodes, connections):
@@ -33,3 +35,14 @@ def draw_graph_mplib(nodes, connections):
     # Create and display the graph
     nx.draw(G, node_color=node_colors, labels=labels, with_labels=True)
     plt.show()
+
+
+def draw_graphviz(nodes, connections):
+    dot = Digraph(comment = "Maze", format="png")
+    for i in nodes:
+        print(i.name)
+        dot.node(str(i.name), "TEst")
+    dot.edges(connections)
+    dot.render("test.png", view=True)
+
+
