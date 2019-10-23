@@ -188,10 +188,16 @@ def clean_graph(allNodes):
             # print("After", i.prvNode.nextNodes)
 
             i.nextNodes[0].prvNode = i.prvNode
+
+            # Conserve length
+            i.nextNodes[0].distance += i.distance
+            # Conserve coords of node
+            i.nextNodes[0].draw_path += i.draw_path
+            # Clear out the node properties
             i.prvNode = None
             i.nextNodes = []
             Graph.MarkForRemoval(i)
-            print(f"Node {i.name} Removed")
+
             # print(f"Node {i.name} Removed")
     # input("CLEAN OVER")
 
@@ -255,7 +261,7 @@ def main():
 
     all_paths.sort(key=lambda x: x[1])
 
-    dg.draw_network(all_paths)
+    # dg.draw_network(all_paths)
 
 
 #####################
@@ -287,3 +293,4 @@ print("")
 
 # print(paths)
 
+im.draw_solution("200x200.bmp", paths)
