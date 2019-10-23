@@ -207,7 +207,7 @@ def main():
     print("Generating Maze")
     print("---------------")
     tstart = time.time()
-    test_maze = im.generate_text_maze("21x21.bmp")
+    test_maze = im.generate_text_maze("200x200.bmp")
     tend = time.time()
     print(f"Done, Took {round(tend-tstart, 2)} seconds")
     print("")
@@ -247,6 +247,7 @@ def main():
     print("---------------------------")
     tstart = time.time()
     clean_graph(Graph.all_Nodes)
+    Graph.all_Nodes = [i for i in Graph.all_Nodes if i.remove == 0]
     tend = time.time()
     print(f"Done, Took {round(tend-tstart, 2)} seconds")
     print("")
