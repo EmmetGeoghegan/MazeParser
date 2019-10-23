@@ -167,7 +167,27 @@ def get_paths(Node):
 
     return all_paths
 
-#
+
+# Prune unnecessary nodes
+def clean_graph(allNodes):
+    for i in allNodes:
+        # Useless check
+        if len(i.neighbors) == 2:
+            print(f"Node {i.name} is useless")
+            print(i.prvNode, i.nextNodes)
+            print(i.prvNode.nextNodes)
+            print("Before", i.prvNode.nextNodes)
+
+            i.prvNode.nextNodes.remove(i)
+            i.prvNode.nextNodes.append(i.nextNodes[0])
+
+            print("After", i.prvNode.nextNodes)
+
+            i.nextNodes[0].prvNode = i.prvNode
+            i.prvNode = None
+            i.nextNodes = []
+            Graph.MarkForRemoval(i)
+            print(f"Node {i.name} Removed")
 
 
 def main():
@@ -214,15 +234,15 @@ def main():
     print("Removing Unnecessary Nodes")
     print("---------------------------")
     tstart = time.time()
-    start_node = Graph.all_Nodes[0]
-    get_next_nodes(start_node)
+    clean_graph(Graph.all_Nodes)
     tend = time.time()
     print(f"Done, Took {round(tend-tstart, 2)} seconds")
     print("")
 
-
-
+    print(Graph.all_Nodes)
+    print("--=-=-=-=-=-=-")
     Graph.all_Nodes = [i for i in Graph.all_Nodes if i.remove == 0]
+    print(Graph.all_Nodes)
     # Get all node info
     all_paths = []
     for i in Graph.all_Nodes:
