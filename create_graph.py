@@ -177,10 +177,6 @@ def clean_graph(allNodes):
     for i in allNodes:
         # Useless check
         if len(i.neighbors) == 2:
-            print(f"Node {i.name} is useless")
-            print(i.prvNode, i.nextNodes)
-            print(i.prvNode.nextNodes)
-            print("Before", i.prvNode.nextNodes)
             # print(f"Node {i.name} is useless")
             # print(i.prvNode, i.nextNodes)
             # print(i.prvNode.nextNodes)
