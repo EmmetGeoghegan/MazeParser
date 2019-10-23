@@ -170,53 +170,59 @@ def get_paths(Node):
 
     return all_paths
 
+#
+
 
 def main():
-    # Find whitespace in the maze and make our nodes
+    print("---------------")
+    print("Generating Maze")
+    print("---------------")
+    tstart = time.time()
+    test_maze = im.generate_text_maze("21x21.bmp")
+    tend = time.time()
+    print(f"Done, Took {round(tend-tstart, 2)} seconds")
+    print("")
+
     print("-----------------------------------")
     print("Finding Whitespace and Making Nodes")
     print("-----------------------------------")
-    print("")
-
     tstart = time.time()
     make_nodes(find_whitespace(test_maze))
-    tend = time.time()
-
-    print("----")
-    print("Done")
-    print("----")
-    print(f"Took {round(tend-tstart, 2)} seconds")
-
-    find_node_neighbors(Graph.all_Nodes)
-
-    print("")
-    print("")
-    print("==================")
-    print("==================")
-
-    print("==================")
-    print("==================")
-
     Graph.SetSink(Graph.all_Nodes[-1])
     Graph.SetSource(Graph.all_Nodes[0])
-
-    print("-------------------------")
-    print("Starting Tree Exploration")
-    print("-------------------------")
+    tend = time.time()
+    print(f"Done, Took {round(tend-tstart, 2)} seconds")
     print("")
-    tstart = time.time()
 
+    print("-------------------------")
+    print("Finding Node Neighbors")
+    print("-------------------------")
+    tstart = time.time()
+    find_node_neighbors(Graph.all_Nodes)
+    tend = time.time()
+    print(f"Done, Took {round(tend-tstart, 2)} seconds")
+    print("")
+
+    print("-----------------")
+    print("Sorting Neighbors")
+    print("-----------------")
+    tstart = time.time()
     start_node = Graph.all_Nodes[0]
     get_next_nodes(start_node)
-
     tend = time.time()
-    print("-------------------")
-    print("Tree Explored Fully")
-    print("-------------------")
-    print(f"Took {round(tend-tstart, 2)} seconds")
+    print(f"Done, Took {round(tend-tstart, 2)} seconds")
     print("")
 
-    Graph.all_Nodes
+    print("---------------------------")
+    print("Removing Unnessessary Nodes")
+    print("---------------------------")
+    tstart = time.time()
+    start_node = Graph.all_Nodes[0]
+    get_next_nodes(start_node)
+    tend = time.time()
+    print(f"Done, Took {round(tend-tstart, 2)} seconds")
+    print("")
+
     for i in Graph.all_Nodes:
         if len(i.neighbors) == 2:
             print(f"Node {i.name} is useless")
@@ -237,8 +243,6 @@ def main():
     # Get all node info
     all_paths = []
     for i in Graph.all_Nodes:
-        Graph.nodeinfo(i)
-        print("")
         all_paths += get_paths(i)
 
     all_paths.sort(key=lambda x: x[1])
@@ -266,6 +270,10 @@ def dfs_paths(All_Nodes, start, end, path=[]):
 
 main()
 
+tstart = time.time()
 paths = (dfs_paths(Graph.all_Nodes, Graph.all_Nodes[0], Graph.all_Nodes[-1]))
+tend = time.time()
+print(f"Done, Took {round(tend-tstart, 2)} seconds")
+print("")
 
 print(paths)
