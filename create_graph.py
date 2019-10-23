@@ -1,6 +1,9 @@
 import display_graph as dg
 import interpret_maze as im
 import time
+import sys
+
+sys.setrecursionlimit(15000)
 
 # test_maze = [
 #             ["x", "x", "x", "o", "x", "x"],
