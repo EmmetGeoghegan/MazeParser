@@ -180,17 +180,23 @@ def clean_graph(allNodes):
             print(i.prvNode, i.nextNodes)
             print(i.prvNode.nextNodes)
             print("Before", i.prvNode.nextNodes)
+            # print(f"Node {i.name} is useless")
+            # print(i.prvNode, i.nextNodes)
+            # print(i.prvNode.nextNodes)
+            # print("Before", i.prvNode.nextNodes)
 
             i.prvNode.nextNodes.remove(i)
             i.prvNode.nextNodes.append(i.nextNodes[0])
 
-            print("After", i.prvNode.nextNodes)
+            # print("After", i.prvNode.nextNodes)
 
             i.nextNodes[0].prvNode = i.prvNode
             i.prvNode = None
             i.nextNodes = []
             Graph.MarkForRemoval(i)
             print(f"Node {i.name} Removed")
+            # print(f"Node {i.name} Removed")
+    # input("CLEAN OVER")
 
 
 def main():
