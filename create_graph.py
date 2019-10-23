@@ -173,6 +173,7 @@ def get_paths(Node):
 
 # Prune unnecessary nodes
 def clean_graph(allNodes):
+    # input("START CLEAN")
     for i in allNodes:
         # Useless check
         if len(i.neighbors) == 2:
@@ -248,10 +249,9 @@ def main():
     print(f"Done, Took {round(tend-tstart, 2)} seconds")
     print("")
 
-    print(Graph.all_Nodes)
-    print("--=-=-=-=-=-=-")
-    Graph.all_Nodes = [i for i in Graph.all_Nodes if i.remove == 0]
-    print(Graph.all_Nodes)
+    # print(Graph.all_Nodes)
+    # print("--=-=-=-=-=-=-")
+    # print(Graph.all_Nodes)
     # Get all node info
     all_paths = []
     for i in Graph.all_Nodes:
@@ -267,7 +267,7 @@ def main():
 #####################
 
 def dfs_paths(All_Nodes, start, end, path=[]):
-    print(path)
+    # print(path)
     path = path + [start]
     if start == end:
         return [path]
@@ -285,7 +285,9 @@ main()
 tstart = time.time()
 paths = (dfs_paths(Graph.all_Nodes, Graph.all_Nodes[0], Graph.all_Nodes[-1]))
 tend = time.time()
+
 print(f"Done, Took {round(tend-tstart, 2)} seconds")
 print("")
 
-print(paths)
+# print(paths)
+
