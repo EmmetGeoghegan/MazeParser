@@ -17,22 +17,35 @@ o_loc = []
 test_maze = im.generate_text_maze("21x21.bmp")
 
 
+# Class to contain our Graph Structure
 class Graph:
+    # Container for all nodes of the graph
     all_Nodes = []
 
     def __init__(self, position, name):
+        # Setup node
         Graph.all_Nodes.append(self)
         self.name = name
-        self.remove = 0
         self.xpos = position[0]
         self.ypos = position[1]
 
-        self.neighbors = []
-        self.nextnodes = []
+        # Info needed to draw the node
+        self.draw_path = [[self.xpos, self.ypos]]
+        # Distance traveled to reach the node
+        self.distance = 1
 
-        self.PrvNode = Graph.all_Nodes[0]
-        self.Source = 0
-        self.Sink = 0
+        # Initialise with no next features
+        self.neighbors = []
+        self.nextNodes = []
+
+        # Give the source as the default previous node
+        self.prvNode = Graph.all_Nodes[0]
+
+        # Flags for types of node
+        self.source = 0
+        self.sink = 0
+        # Flag that a node is useless, ie its got 2 connections
+        self.remove = 0
 
     def __repr__(self):
         return str(self.name)
@@ -40,79 +53,120 @@ class Graph:
     def AddNeighbor(self, node):
         self.neighbors.append(node)
 
-    def PrvNode(self, node):
-        self.PrvNode = node
+    def SetPrvNode(self, node):
+        self.prvNode = node
 
-    def NextNodes(self, node):
-        self.nextnodes.append(node)
+    def SetNextNodes(self, node):
+        self.nextNodes.append(node)
 
-    def setSource(self):
-        self.Source = 1
+    def SetSource(self):
+        self.source = 1
 
-    def markforremoval(self):
+    def MarkForRemoval(self):
         self.remove = 1
 
-    def setSink(self):
-        self.Sink = 1
+    def SetSink(self):
+        self.sink = 1
 
-    def PrintAllNeighbor(self):
-        all_neighbors = ", ".join([str(i.name) for i in self.nextnodes])
+    # Pretty print node indepth info
+    def nodeinfo(self):
+        print("=======================================")
+        print(f"Node Name: {self.name}")
+        if self.source > 0:
+            print("Type: Source Node")
+        elif self.sink > 0:
+            print("Type: Sink Node")
+        elif len(self.nextNodes) == 0:
+            print("Type: End Node")
+        else:
+            print("Type: Normal Node")
+        print(f"Previous Node: {self.prvNode}")
+        print(f"Next Nodes: {self.PrintNextNodes()}")
+        print("=======================================")
+
+    # Printer helper function
+    def PrintNextNodes(self):
+        all_neighbors = ", ".join([str(i.name) for i in self.nextNodes])
         if len(all_neighbors) == 0:
             return("None")
         return all_neighbors
 
-    def nodeinfo(self):
-        print("=======================================")
-        print(f"Node Name: {self.name}")
-        if self.Source > 0:
-            print("Type: Source Node")
-        elif self.Sink > 0:
-            print("Type: Sink Node")
-        elif len(self.nextnodes) == 0:
-            print("Type: End Node")
-        else:
-            print("Type: Normal Node")
-        print(f"Previous Node: {self.PrvNode}")
-        print(f"Next Nodes: {self.PrintAllNeighbor()}")
-        print("=======================================")
+
+################################################################################
 
 
-def explore_tree(node):
-    for i in node.neighbors:
-        if i.name != node.PrvNode.name:
-            node.nextnodes.append(i)
-            i.PrvNode = node
-            explore_tree(i)
-
-
+# Find the co-ords of the whitespace in the maze O(n)
 def find_whitespace(maze):
-    whitespace = []
+    whitespace_coords = []
     for rownum, row in enumerate(test_maze):
         for colnum, entry in enumerate(row):
             if entry == "o":
-                whitespace.append([rownum, colnum])
-    return whitespace
+                whitespace_coords.append([rownum, colnum])
+    return whitespace_coords
 
 
+# Seperate the neighbors of a node into previous and next nodes O(n)
+def get_next_nodes(node):
+    for i in node.neighbors:
+        """
+        This is why we have to __init__ with prvNode as the source.
+        It lets us have a link to start on, ie source to the first node
+        """
+        if i.name != node.prvNode.name:
+            node.nextNodes.append(i)
+            i.prvNode = node
+            # Explore the nodes til done.
+            get_next_nodes(i)
+
+
+# Take [[x,y]*n...] and create nodes O(n)
 def make_nodes(whitespace):
     for NodeID, i in enumerate(whitespace):
+        # Nodes are named based on the order they are read in
+        # ie top to bottom, left to right
         Graph(i, NodeID)
 
 
-def find_adjacent_nodes(AllNodes):
+# Figure out if a node is a neighbor to another node O(n^2)
+def find_node_neighbors(AllNodes):
+    # Check every node against every other node
+    # TODO: Investigate a way to reduce time complexity
     for i in AllNodes:
         for j in AllNodes:
+            # If not checking the same node
             if i != j:
+                """
+                A B C  If this is our test chunk of maze, we want to find the
+                D X E  neighbors of X. They should be [B, D, E, G]
+                F G H  Diagonal moves are not possible in our mazes
+
+                We calculate this based on coordinate difference.
+                However all A->H are within "1" x and y
+                """
                 if (0 <= abs(i.xpos-j.xpos) <= 1):
                     if (0 <= abs(i.ypos-j.ypos) <= 1):
+                        """
+                        A B C  This tests if the xpos and ypos differences are
+                        D X E  either 1 or 0. The only nodes to pass this test
+                        F G H  Are A->H
+                        """
                         if abs(i.xpos-j.xpos) != abs(i.ypos-j.ypos):
+                            """
+                            . B .  To finally get the neighbors of X we XOR
+                            D X E  two different checks. That the difference
+                            . G .  in xposition is not equal to the difference
+                                   in yposition. [A, C, F, H] all have a
+                                   non-zero xpos AND ypos difference. XORing
+                                   the checks produce our neighbors [B, D, E, G]
+                            """
                             i.AddNeighbor(j)
 
 
+# Get all forward paths in the network O(n)
 def get_paths(Node):
     all_paths = []
-    for i in Node.nextnodes:
-        all_paths.append([(Node.name), (i.name)])  # Networkx
+    for i in Node.nextNodes:
+        all_paths.append([(Node.name), (i.name)])
 
     return all_paths
 
@@ -133,7 +187,7 @@ def main():
     print("----")
     print(f"Took {round(tend-tstart, 2)} seconds")
 
-    find_adjacent_nodes(Graph.all_Nodes)
+    find_node_neighbors(Graph.all_Nodes)
 
     print("")
     print("")
@@ -143,8 +197,8 @@ def main():
     print("==================")
     print("==================")
 
-    Graph.setSink(Graph.all_Nodes[-1])
-    Graph.setSource(Graph.all_Nodes[0])
+    Graph.SetSink(Graph.all_Nodes[-1])
+    Graph.SetSource(Graph.all_Nodes[0])
 
     print("-------------------------")
     print("Starting Tree Exploration")
@@ -153,7 +207,7 @@ def main():
     tstart = time.time()
 
     start_node = Graph.all_Nodes[0]
-    explore_tree(start_node)
+    get_next_nodes(start_node)
 
     tend = time.time()
     print("-------------------")
@@ -166,16 +220,16 @@ def main():
     for i in Graph.all_Nodes:
         if len(i.neighbors) == 2:
             print(f"Node {i.name} is useless")
-            print(i.PrvNode, i.nextnodes)
-            print(i.PrvNode.nextnodes)
-            print("Before", i.PrvNode.nextnodes)
-            i.PrvNode.nextnodes.remove(i)
-            i.PrvNode.nextnodes.append(i.nextnodes[0])
-            print("After", i.PrvNode.nextnodes)
+            print(i.prvNode, i.nextNodes)
+            print(i.prvNode.nextNodes)
+            print("Before", i.prvNode.nextNodes)
+            i.prvNode.nextNodes.remove(i)
+            i.prvNode.nextNodes.append(i.nextNodes[0])
+            print("After", i.prvNode.nextNodes)
 
-            i.nextnodes[0].PrvNode = i.PrvNode
-            i.PrvNode = None
-            i.nextnodes = []
+            i.nextNodes[0].prvNode = i.prvNode
+            i.prvNode = None
+            i.nextNodes = []
             # Graph.markforremoval(i)
             print(f"Node {i.name} Removed")
 
@@ -186,22 +240,23 @@ def main():
         Graph.nodeinfo(i)
         print("")
         all_paths += get_paths(i)
-    input()
+
     all_paths.sort(key=lambda x: x[1])
 
-    print(all_paths)
-
-    for i in Graph.all_Nodes:
-        Graph.nodeinfo(i)
     dg.draw_network(all_paths)
 
 
+#####################
+#   Dev Functions   #
+#####################
+
 def dfs_paths(All_Nodes, start, end, path=[]):
+    print(path)
     path = path + [start]
     if start == end:
         return [path]
     paths = []
-    for node in start.nextnodes:
+    for node in start.nextNodes:
         if node not in path:
             newpaths = dfs_paths(All_Nodes, node, end, path)
             for newpath in newpaths:
