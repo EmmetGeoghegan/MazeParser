@@ -2,19 +2,16 @@ import display_graph as dg
 import interpret_maze as im
 import time
 
-test_maze = [
-            ["x", "x", "x", "o", "x", "x"],
-            ["x", "o", "x", "o", "o", "x"],
-            ["x", "o", "x", "o", "x", "x"],
-            ["x", "o", "o", "o", "o", "x"],
-            ["x", "x", "x", "o", "x", "x"],
-            ["x", "o", "o", "o", "o", "x"],
-            ["x", "o", "x", "x", "x", "x"],
-]
-
-layer = -1
-o_loc = []
-test_maze = im.generate_text_maze("21x21.bmp")
+# test_maze = [
+#             ["x", "x", "x", "o", "x", "x"],
+#             ["x", "o", "x", "o", "o", "x"],
+#             ["x", "o", "x", "o", "x", "x"],
+#             ["x", "o", "o", "o", "o", "x"],
+#             ["x", "x", "x", "o", "x", "x"],
+#             ["x", "o", "o", "o", "o", "x"],
+#             ["x", "o", "x", "x", "x", "x"],
+# ]
+# test_maze = im.generate_text_maze("21x21.bmp")
 
 
 # Class to contain our Graph Structure
@@ -96,9 +93,9 @@ class Graph:
 
 
 # Find the co-ords of the whitespace in the maze O(n)
-def find_whitespace(maze):
+def find_whitespace(Maze):
     whitespace_coords = []
-    for rownum, row in enumerate(test_maze):
+    for rownum, row in enumerate(Maze):
         for colnum, entry in enumerate(row):
             if entry == "o":
                 whitespace_coords.append([rownum, colnum])
@@ -106,22 +103,22 @@ def find_whitespace(maze):
 
 
 # Seperate the neighbors of a node into previous and next nodes O(n)
-def get_next_nodes(node):
-    for i in node.neighbors:
+def get_next_nodes(Node):
+    for i in Node.neighbors:
         """
         This is why we have to __init__ with prvNode as the source.
         It lets us have a link to start on, ie source to the first node
         """
-        if i.name != node.prvNode.name:
-            node.nextNodes.append(i)
-            i.prvNode = node
+        if i.name != Node.prvNode.name:
+            Node.nextNodes.append(i)
+            i.prvNode = Node
             # Explore the nodes til done.
             get_next_nodes(i)
 
 
 # Take [[x,y]*n...] and create nodes O(n)
-def make_nodes(whitespace):
-    for NodeID, i in enumerate(whitespace):
+def make_nodes(Whitespace):
+    for NodeID, i in enumerate(Whitespace):
         # Nodes are named based on the order they are read in
         # ie top to bottom, left to right
         Graph(i, NodeID)
@@ -214,7 +211,7 @@ def main():
     print("")
 
     print("---------------------------")
-    print("Removing Unnessessary Nodes")
+    print("Removing Unnecessary Nodes")
     print("---------------------------")
     tstart = time.time()
     start_node = Graph.all_Nodes[0]
@@ -223,21 +220,7 @@ def main():
     print(f"Done, Took {round(tend-tstart, 2)} seconds")
     print("")
 
-    for i in Graph.all_Nodes:
-        if len(i.neighbors) == 2:
-            print(f"Node {i.name} is useless")
-            print(i.prvNode, i.nextNodes)
-            print(i.prvNode.nextNodes)
-            print("Before", i.prvNode.nextNodes)
-            i.prvNode.nextNodes.remove(i)
-            i.prvNode.nextNodes.append(i.nextNodes[0])
-            print("After", i.prvNode.nextNodes)
 
-            i.nextNodes[0].prvNode = i.prvNode
-            i.prvNode = None
-            i.nextNodes = []
-            # Graph.markforremoval(i)
-            print(f"Node {i.name} Removed")
 
     Graph.all_Nodes = [i for i in Graph.all_Nodes if i.remove == 0]
     # Get all node info
