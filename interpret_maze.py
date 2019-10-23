@@ -1,12 +1,11 @@
 import cv2
 
 
-def generate_text_maze(image):
+def generate_text_maze(image, wall_symbol="x", path_symbol="o"):
     # Read in the image into memory
     image = cv2.imread(f".//mazes//{image}")
     # Maze container
     maze = []
-    # print(image.shape[0])
     # Loop through maze and get pixel values
     for row in range(image.shape[0]):
         # Maze row container
@@ -16,9 +15,9 @@ def generate_text_maze(image):
             # Grab Pixel values and if black its a wall else path
             pixel = image[row, column]
             if pixel[1] == 0:
-                maze_row.append("x")
+                maze_row.append(wall_symbol)
             else:
-                maze_row.append("o")
+                maze_row.append(path_symbol)
         # Append each row to our maze object
         maze.append(maze_row)
     return maze
@@ -28,6 +27,9 @@ def main():
     filename = input("Please enter filename (with extension): ")
     try:
         maze = generate_text_maze(filename)
+        print("=====================")
+        print("      TEXT MAZE      ")
+        print("=====================")
         for i in maze:
             print(str("".join(i)))
 
