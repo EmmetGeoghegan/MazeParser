@@ -19,7 +19,6 @@ test_maze = im.generate_text_maze("21x21.bmp")
 
 class Graph:
     all_Nodes = []
-    all_Useful_Nodes = []
 
     def __init__(self, position, name):
         Graph.all_Nodes.append(self)
@@ -138,14 +137,6 @@ def main():
 
     print("")
     print("")
-
-    all_connections = []
-    for i in Graph.all_Nodes:
-        for j in i.neighbors:
-            # if (j.name, i.name) not in all_connections:
-            all_connections.append((i.name, j.name))
-    print(all_connections)
-
     print("==================")
     print("==================")
 
@@ -171,8 +162,8 @@ def main():
     print(f"Took {round(tend-tstart, 2)} seconds")
     print("")
 
-    Graph.all_Useful_Nodes = Graph.all_Nodes
-    for i in Graph.all_Useful_Nodes:
+    Graph.all_Nodes
+    for i in Graph.all_Nodes:
         if len(i.neighbors) == 2:
             print(f"Node {i.name} is useless")
             print(i.PrvNode, i.nextnodes)
@@ -188,7 +179,7 @@ def main():
             # Graph.markforremoval(i)
             print(f"Node {i.name} Removed")
 
-    Graph.all_Useful_Nodes = [i for i in Graph.all_Useful_Nodes if i.remove == 0]
+    Graph.all_Nodes = [i for i in Graph.all_Nodes if i.remove == 0]
     # Get all node info
     all_paths = []
     for i in Graph.all_Nodes:
@@ -198,11 +189,9 @@ def main():
     input()
     all_paths.sort(key=lambda x: x[1])
 
-    print(all_connections)
-    print("===")
     print(all_paths)
 
-    for i in Graph.all_Useful_Nodes:
+    for i in Graph.all_Nodes:
         Graph.nodeinfo(i)
     dg.draw_network(all_paths)
 
