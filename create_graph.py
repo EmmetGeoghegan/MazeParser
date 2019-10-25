@@ -5,15 +5,7 @@ import sys
 
 sys.setrecursionlimit(15000)
 
-# test_maze = [
-#             ["x", "x", "x", "o", "x", "x"],
-#             ["x", "o", "x", "o", "o", "x"],
-#             ["x", "o", "x", "o", "x", "x"],
-#             ["x", "o", "o", "o", "o", "x"],
-#             ["x", "x", "x", "o", "x", "x"],
-#             ["x", "o", "o", "o", "o", "x"],
-#             ["x", "o", "x", "x", "x", "x"],
-# ]
+
 # test_maze = im.generate_text_maze("21x21.bmp")
 
 
@@ -191,7 +183,7 @@ def clean_graph(allNodes):
 
             # Conserve length
             i.nextNodes[0].distance += i.distance
-            
+
             # Conserve coords of node
             i.nextNodes[0].draw_path += i.draw_path
             # Clear out the node properties
