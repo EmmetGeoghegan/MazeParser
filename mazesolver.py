@@ -1,5 +1,6 @@
 import time
 import sys
+# import resource
 import interpret_maze as im
 import create_graph as cg
 
@@ -76,6 +77,7 @@ def main(maze_name):
 
 if __name__ == '__main__':
     sys.setrecursionlimit(15000)
+    # resource.setrlimit(resource.RLIMIT_STACK, (resource.RLIM_INFINITY, resource.RLIM_INFINITY))
     maze_name = input("Plz enter maze name: ")
-    maze_name = "200x200.bmp"
+    maze_name = "1000x1000.bmp"
     main(maze_name)

@@ -124,38 +124,34 @@ def find_node_neighbors(AllNodes):
         # print(f"Coords:{(i.xpos, i.ypos)} NodeID:{i}")
         # print("in row: ", Graph.row_containers[i.xpos])
         # print("incol: ", Graph.column_containers[i.ypos])
-        possible_nodes = []
-        possible_nodes += Graph.row_containers[i.xpos]
-        possible_nodes += Graph.column_containers[i.ypos]
+        possible_nodes_x = []
+        possible_nodes_y = []
+        possible_nodes_x += Graph.row_containers[i.xpos - 1]
+        possible_nodes_x += Graph.row_containers[i.xpos]
+        try:
+            possible_nodes_x += Graph.row_containers[i.xpos + 1]
+        except IndexError:
+            pass
+        possible_nodes_y += Graph.column_containers[i.ypos - 1]
+        possible_nodes_y += Graph.column_containers[i.ypos]
+        try:
+            possible_nodes_y += Graph.column_containers[i.ypos + 1]
+        except IndexError:
+            pass
 
-        for j in set(possible_nodes):
+        for j in list(set(possible_nodes_x).intersection(set(possible_nodes_y))):
             # If not checking the same node
             if i != j:
-                """
-                A B C  If this is our test chunk of maze, we want to find the
-                D X E  neighbors of X. They should be [B, D, E, G]
-                F G H  Diagonal moves are not possible in our mazes
-
-                We calculate this based on coordinate difference.
-                However all A->H are within "1" x and y
-                """
-                if (0 <= abs(i.xpos-j.xpos) <= 1):
-                    if (0 <= abs(i.ypos-j.ypos) <= 1):
-                        """
-                        A B C  This tests if the xpos and ypos differences are
-                        D X E  either 1 or 0. The only nodes to pass this test
-                        F G H  Are A->H
-                        """
-                        if abs(i.xpos-j.xpos) != abs(i.ypos-j.ypos):
-                            """
-                            . B .  To finally get the neighbors of X we XOR
-                            D X E  two different checks. That the difference
-                            . G .  in xposition is not equal to the difference
-                                   in yposition. [A, C, F, H] all have a
-                                   non-zero xpos AND ypos difference. XORing
-                                   the checks produce our neighbors [B, D, E, G]
-                            """
-                            i.AddNeighbor(j)
+                if abs(i.xpos-j.xpos) != abs(i.ypos-j.ypos):
+                    """
+                    . B .  To finally get the neighbors of X we XOR
+                    D X E  two different checks. That the difference
+                    . G .  in xposition is not equal to the difference
+                           in yposition. [A, C, F, H] all have a
+                           non-zero xpos AND ypos difference. XORing
+                           the checks produce our neighbors [B, D, E, G]
+                    """
+                    i.AddNeighbor(j)
         # print(f"Node: {i}, Neighbors: {i.neighbors}")
 
 
