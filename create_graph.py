@@ -78,11 +78,31 @@ class Graph:
 
 # Find the co-ords of the whitespace in the maze O(n)
 def find_whitespace(Maze):
+    print(Maze)
+    print(len(Maze))
+    print(len(Maze[1]))
+    input()
     whitespace_coords = []
+    row_containers = []
+    column_containers = []
+    for i in range(len(Maze[1])):
+        column_containers.append([])
+
     for rownum, row in enumerate(Maze):
+        row_containers.append([])
         for colnum, entry in enumerate(row):
             if entry == "o":
+                row_containers[rownum].append([rownum, colnum])
+                column_containers[colnum].append([rownum, colnum])
                 whitespace_coords.append([rownum, colnum])
+    print(whitespace_coords)
+    input()
+    for i in row_containers:
+        print(i)
+    input()
+    for i in column_containers:
+        print(i)
+    input()
     return whitespace_coords
 
 
