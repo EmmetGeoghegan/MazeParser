@@ -37,9 +37,6 @@ def draw_solution(imagename, NodePaths):
     cv2.imwrite(f"./solns/{imagename.split('.')[0]}-solved.bmp", image)
 
 
-
-
-
 def main():
     filename = input("Please enter filename (with extension): ")
     try:
