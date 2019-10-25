@@ -125,18 +125,8 @@ def find_node_neighbors(AllNodes):
         # print("in row: ", Graph.row_containers[i.xpos])
         # print("incol: ", Graph.column_containers[i.ypos])
         possible_nodes = []
-        possible_nodes += Graph.row_containers[i.xpos - 1]
         possible_nodes += Graph.row_containers[i.xpos]
-        try:
-            possible_nodes += Graph.row_containers[i.xpos + 1]
-        except IndexError:
-            pass
-        possible_nodes += Graph.column_containers[i.ypos - 1]
         possible_nodes += Graph.column_containers[i.ypos]
-        try:
-            possible_nodes += Graph.column_containers[i.ypos + 1]
-        except IndexError:
-            pass
 
         for j in set(possible_nodes):
             # If not checking the same node

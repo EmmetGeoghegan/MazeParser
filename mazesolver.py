@@ -77,5 +77,5 @@ def main(maze_name):
 if __name__ == '__main__':
     sys.setrecursionlimit(15000)
     maze_name = input("Plz enter maze name: ")
-    maze_name = "1000x1000.bmp"
+    maze_name = "200x200.bmp"
     main(maze_name)
