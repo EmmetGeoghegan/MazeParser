@@ -1,14 +1,3 @@
-# import display_graph as dg
-import interpret_maze as im
-import time
-import sys
-
-sys.setrecursionlimit(15000)
-
-
-# test_maze = im.generate_text_maze("21x21.bmp")
-
-
 # Class to contain our Graph Structure
 class Graph:
     # Container for all nodes of the graph
@@ -195,69 +184,6 @@ def clean_graph(allNodes):
     # input("CLEAN OVER")
 
 
-def main():
-    print("---------------")
-    print("Generating Maze")
-    print("---------------")
-    tstart = time.time()
-    maze = im.generate_text_maze("20x20.bmp")
-    tend = time.time()
-    print(f"Done, Took {round(tend-tstart, 2)} seconds")
-    print("")
-
-    print("-----------------------------------")
-    print("Finding Whitespace and Making Nodes")
-    print("-----------------------------------")
-    tstart = time.time()
-    make_nodes(find_whitespace(maze))
-    Graph.SetSource(Graph.all_Nodes[0])
-    Graph.SetSink(Graph.all_Nodes[-1])
-    tend = time.time()
-    print(f"Done, Took {round(tend-tstart, 2)} seconds")
-    print("")
-
-    print("-------------------------")
-    print("Finding Node Neighbors")
-    print("-------------------------")
-    tstart = time.time()
-    find_node_neighbors(Graph.all_Nodes)
-    tend = time.time()
-    print(f"Done, Took {round(tend-tstart, 2)} seconds")
-    print("")
-
-    print("-----------------")
-    print("Sorting Neighbors")
-    print("-----------------")
-    tstart = time.time()
-    start_node = Graph.all_Nodes[0]
-    get_next_nodes(start_node)
-    tend = time.time()
-    print(f"Done, Took {round(tend-tstart, 2)} seconds")
-    print("")
-
-    print("---------------------------")
-    print("Removing Unnecessary Nodes")
-    print("---------------------------")
-    tstart = time.time()
-    clean_graph(Graph.all_Nodes)
-    Graph.all_Nodes = [i for i in Graph.all_Nodes if i.remove == 0]
-    tend = time.time()
-    print(f"Done, Took {round(tend-tstart, 2)} seconds")
-    print("")
-
-    # print(Graph.all_Nodes)
-    # print("--=-=-=-=-=-=-")
-    # print(Graph.all_Nodes)
-    # Get all node info
-    all_paths = []
-    for i in Graph.all_Nodes:
-        all_paths += get_paths(i)
-
-    all_paths.sort(key=lambda x: x[1])
-
-    # dg.draw_network(all_paths)
-
-
 #####################
 #   Dev Functions   #
 #####################
@@ -274,17 +200,3 @@ def dfs_paths(All_Nodes, start, end, path=[]):
             for newpath in newpaths:
                 paths.append(newpath)
     return paths
-
-
-main()
-
-tstart = time.time()
-paths = (dfs_paths(Graph.all_Nodes, Graph.all_Nodes[0], Graph.all_Nodes[-1]))
-tend = time.time()
-
-print(f"Done, Took {round(tend-tstart, 2)} seconds")
-print("")
-
-# print(paths)
-
-im.draw_solution("200x200.bmp", paths)
