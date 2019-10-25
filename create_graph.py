@@ -120,7 +120,6 @@ def find_node_neighbors(AllNodes):
     # Check every node against every other node
     # TODO: Investigate a way to reduce time complexity
     print(len(AllNodes))
-    input()
     for i in AllNodes:
         # print(f"Coords:{(i.xpos, i.ypos)} NodeID:{i}")
         # print("in row: ", Graph.row_containers[i.xpos])
