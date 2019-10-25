@@ -2,6 +2,8 @@
 class Graph:
     # Container for all nodes of the graph
     all_Nodes = []
+    row_containers = []
+    column_containers = []
 
     def __init__(self, position, name):
         # Setup node
@@ -77,33 +79,25 @@ class Graph:
 
 
 # Find the co-ords of the whitespace in the maze O(n)
+# Create the node then add it to the appropriate sub-container
 def find_whitespace(Maze):
-    print(Maze)
-    print(len(Maze))
-    print(len(Maze[1]))
-    input()
-    whitespace_coords = []
     row_containers = []
     column_containers = []
     for i in range(len(Maze[1])):
         column_containers.append([])
-
-    for rownum, row in enumerate(Maze):
-        row_containers.append([])
-        for colnum, entry in enumerate(row):
-            if entry == "o":
-                row_containers[rownum].append([rownum, colnum])
-                column_containers[colnum].append([rownum, colnum])
-                whitespace_coords.append([rownum, colnum])
-    print(whitespace_coords)
-    input()
-    for i in row_containers:
-        print(i)
-    input()
-    for i in column_containers:
-        print(i)
-    input()
-    return whitespace_coords
+    Node_ID = 0
+    while True:
+        for rownum, row in enumerate(Maze):
+            row_containers.append([])
+            for colnum, entry in enumerate(row):
+                if entry == "o":
+                    this_node = Graph([rownum, colnum], Node_ID)
+                    row_containers[rownum].append(this_node)
+                    column_containers[colnum].append(this_node)
+                    Node_ID += 1
+        break
+    Graph.row_containers = row_containers
+    Graph.column_containers = column_containers
 
 
 # Seperate the neighbors of a node into previous and next nodes O(n)
@@ -116,24 +110,36 @@ def get_next_nodes(Node):
         if i.name != Node.prvNode.name:
             Node.nextNodes.append(i)
             i.prvNode = Node
+            # print("Done node;", i)
             # Explore the nodes til done.
             get_next_nodes(i)
-
-
-# Take [[x,y]*n...] and create nodes O(n)
-def make_nodes(Whitespace):
-    for NodeID, i in enumerate(Whitespace):
-        # Nodes are named based on the order they are read in
-        # ie top to bottom, left to right
-        Graph(i, NodeID)
 
 
 # Figure out if a node is a neighbor to another node O(n^2)
 def find_node_neighbors(AllNodes):
     # Check every node against every other node
     # TODO: Investigate a way to reduce time complexity
+    print(len(AllNodes))
+    input()
     for i in AllNodes:
-        for j in AllNodes:
+        # print(f"Coords:{(i.xpos, i.ypos)} NodeID:{i}")
+        # print("in row: ", Graph.row_containers[i.xpos])
+        # print("incol: ", Graph.column_containers[i.ypos])
+        possible_nodes = []
+        possible_nodes += Graph.row_containers[i.xpos - 1]
+        possible_nodes += Graph.row_containers[i.xpos]
+        try:
+            possible_nodes += Graph.row_containers[i.xpos + 1]
+        except IndexError:
+            pass
+        possible_nodes += Graph.column_containers[i.ypos - 1]
+        possible_nodes += Graph.column_containers[i.ypos]
+        try:
+            possible_nodes += Graph.column_containers[i.ypos + 1]
+        except IndexError:
+            pass
+
+        for j in set(possible_nodes):
             # If not checking the same node
             if i != j:
                 """
@@ -161,6 +167,7 @@ def find_node_neighbors(AllNodes):
                                    the checks produce our neighbors [B, D, E, G]
                             """
                             i.AddNeighbor(j)
+        # print(f"Node: {i}, Neighbors: {i.neighbors}")
 
 
 # Get all forward paths in the network O(n)

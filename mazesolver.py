@@ -18,7 +18,7 @@ def main(maze_name):
     print("Finding Whitespace and Making Nodes")
     print("-----------------------------------")
     tstart = time.time()
-    cg.make_nodes(cg.find_whitespace(maze))
+    cg.find_whitespace(maze)
     cg.Graph.SetSource(cg.Graph.all_Nodes[0])
     cg.Graph.SetSink(cg.Graph.all_Nodes[-1])
     tend = time.time()
@@ -77,5 +77,5 @@ def main(maze_name):
 if __name__ == '__main__':
     sys.setrecursionlimit(15000)
     maze_name = input("Plz enter maze name: ")
-    maze_name = "10x10.bmp"
+    maze_name = "1000x1000.bmp"
     main(maze_name)
