@@ -1,4 +1,4 @@
-import display_graph as dg
+# import display_graph as dg
 import interpret_maze as im
 import time
 import sys
@@ -191,6 +191,7 @@ def clean_graph(allNodes):
 
             # Conserve length
             i.nextNodes[0].distance += i.distance
+            
             # Conserve coords of node
             i.nextNodes[0].draw_path += i.draw_path
             # Clear out the node properties
@@ -207,7 +208,7 @@ def main():
     print("Generating Maze")
     print("---------------")
     tstart = time.time()
-    test_maze = im.generate_text_maze("200x200.bmp")
+    maze = im.generate_text_maze("20x20.bmp")
     tend = time.time()
     print(f"Done, Took {round(tend-tstart, 2)} seconds")
     print("")
@@ -216,9 +217,9 @@ def main():
     print("Finding Whitespace and Making Nodes")
     print("-----------------------------------")
     tstart = time.time()
-    make_nodes(find_whitespace(test_maze))
-    Graph.SetSink(Graph.all_Nodes[-1])
+    make_nodes(find_whitespace(maze))
     Graph.SetSource(Graph.all_Nodes[0])
+    Graph.SetSink(Graph.all_Nodes[-1])
     tend = time.time()
     print(f"Done, Took {round(tend-tstart, 2)} seconds")
     print("")
