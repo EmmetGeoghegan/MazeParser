@@ -112,7 +112,7 @@ def get_next_nodes(Node, depth):
         if i.name != Node.prvNode.name:
             Node.nextNodes.append(i)
             i.prvNode = Node
-            print("Done node;", i, "Depth", depth)
+            # print("Done node;", i, "Depth", depth)
             # Explore the nodes til done.
             get_next_nodes(i, depth)
 
