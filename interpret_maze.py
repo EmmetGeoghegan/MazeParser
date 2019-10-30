@@ -27,6 +27,10 @@ def generate_text_maze(image, wall_symbol="x", path_symbol="o"):
 
 
 def draw_solution(imagename, NodePaths):
+# Animate the solution on the graph
+def draw_gif_solution(imagename, NodePaths):
+    directory = f"{os.getcwd()}\\gif"
+    os.mkdir(directory)
     index = 1
     outfile_list = []
     for i in NodePaths:
@@ -52,16 +56,9 @@ def draw_solution(imagename, NodePaths):
         images[0].save(f"./gif_soln/{imagename.split('.')[0]}.gif",
                        save_all=True,
                        append_images=images[1:],
-                       duration=100,
+                       duration=20,
                        loop=0)
-        directory = f"{os.getcwd()}\\gif"
-
-        clean_directory(directory)
-
-
-def clean_directory(directory):
-    shutil.rmtree(directory)
-    os.mkdir(directory)
+        shutil.rmtree(directory)
 
 
 def main():
