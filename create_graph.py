@@ -42,14 +42,8 @@ class Graph:
     def SetNextNodes(self, node):
         self.nextNodes.append(node)
 
-    def SetSource(self):
-        self.source = 1
-
     def MarkForRemoval(self):
         self.remove = 1
-
-    def SetSink(self):
-        self.sink = 1
 
     # Pretty print node indepth info
     def nodeinfo(self):

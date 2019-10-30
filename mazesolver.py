@@ -19,8 +19,8 @@ def main(maze_name):
     print("-----------------------------------")
     tstart = time.time()
     cg.find_whitespace(maze)
-    cg.Graph.SetSource(cg.Graph.all_Nodes[0])
-    cg.Graph.SetSink(cg.Graph.all_Nodes[-1])
+    cg.Graph.all_Nodes[0].source = 1
+    cg.Graph.all_Nodes[-1].sink = 1
     tend = time.time()
     print(f"Done, Took {round(tend-tstart, 2)} seconds")
     print("")
