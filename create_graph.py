@@ -54,36 +54,26 @@ class Graph:
     # prints all not yet visited vertices
     # reachable from s
     def DFS_TEST(self):
-
         # Create a stack for DFS
         stack = []
-
         # Push the current source node.
-        stack.append(self)
+        stack.append([self, [self]])
         my_path = []
         while (len(stack) != 0):
-
-            # Pop a vertex from stack and prit
+            # Pop a vertex from stack and start
             node = stack.pop()
-
-            # Stack may contain same vertex twice.
-            # So we need to prthe popped item only
-            # if it is not visited.
+            best_path = node[1]
+            node = node[0]
             if not node.visited:
                 # print(node, end=" ")
                 my_path.append(node)
                 node.visited = True
             if node.sink == 1:
-                print("Path Found")
-                return my_path
-
-            # Get all adjacent vertices of the
-            # popped vertex s. If a adjacent has not
-            # been visited, then push it to the stack.
-            for i in sorted(node.neighbors):
+                return my_path, best_path
+            node.neighbors.sort(key=lambda x: x.name)
+            for i in node.neighbors:
                 if i.visited is False:
-                    stack.append(i)
-        return my_path
+                    stack.append([i, best_path+[i]])
 
 
 ################################################################################
