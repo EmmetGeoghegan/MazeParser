@@ -1,4 +1,7 @@
 import cv2
+from PIL import Image
+import os
+import shutil
 
 
 def generate_text_maze(image, wall_symbol="x", path_symbol="o"):
@@ -24,18 +27,41 @@ def generate_text_maze(image, wall_symbol="x", path_symbol="o"):
 
 
 def draw_solution(imagename, NodePaths):
-    image = cv2.imread(f".//mazes//{imagename}")
+    index = 1
+    outfile_list = []
     for i in NodePaths:
-        for j in i:
-            for k in j.draw_path:
-                if image[k[0], k[1]][0] == [0]:
-                    print("WALL DETECTED")
-                    break
-                else:
-                    image[k[0], k[1]] = [0, 0, 255]
+        while index <= len(i):
+            draw_path = []
+            for j in range(0, index, 1):
+                draw_path.append(i[j])
+            index += 1
+            image = cv2.imread(f".//mazes//{imagename}")
+            for k in draw_path:
+                for l in k.draw_path:
+                    image[l[0], l[1]] = [0, 0, 255]
+            outfile_name = f"./gif/{imagename.split('.')[0]}-{index}.png"
+            outfile_list.append(outfile_name)
+            cv2.imwrite(outfile_name, image)
 
-    cv2.imwrite(f"./solns/{imagename.split('.')[0]}-solved.bmp", image)
-    print("Done!")
+        images = []
+        for n in outfile_list:
+            frame = Image.open(n)
+            images.append(frame)
+
+        # Save the frames as an animated GIF
+        images[0].save(f"./gif_soln/{imagename.split('.')[0]}.gif",
+                       save_all=True,
+                       append_images=images[1:],
+                       duration=100,
+                       loop=0)
+        directory = f"{os.getcwd()}\\gif"
+
+        clean_directory(directory)
+
+
+def clean_directory(directory):
+    shutil.rmtree(directory)
+    os.mkdir(directory)
 
 
 def main():

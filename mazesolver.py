@@ -1,6 +1,5 @@
 import time
 import sys
-import threading
 import interpret_maze as im
 import create_graph as cg
 
@@ -39,11 +38,8 @@ def main(maze_name):
     print("Sorting Neighbors")
     print("-----------------")
     tstart = time.time()
-    # threading.stack_size(10240000)
-    # threading.stack_size(1928999000)
     start_node = cg.Graph.all_Nodes[0]
-    thread = threading.Thread(target=cg.get_next_nodes(start_node, 0, 0))
-    thread.start()
+    cg.get_next_nodes(start_node, 0, 0)
     tend = time.time()
     print(f"Done, Took {round(tend-tstart, 2)} seconds")
     print("")
@@ -57,12 +53,6 @@ def main(maze_name):
     tend = time.time()
     print(f"Done, Took {round(tend-tstart, 2)} seconds")
     print("")
-
-    # all_paths = []
-    # for i in cg.Graph.all_Nodes:
-    #     all_paths += cg.get_paths(i)
-    #
-    # all_paths.sort(key=lambda x: x[1])
 
     print("------------------------")
     print("DFS-ing the path to exit")
@@ -82,10 +72,14 @@ def main(maze_name):
 if __name__ == '__main__':
     sys.setrecursionlimit(19000)
     maze_name = input("Plz enter maze name: ")
+    maze_name = "10x10.bmp"
+    maze_name = "20x20.bmp"
+    maze_name = "100x100.bmp"
     maze_name = "200x200.bmp"
+
+    # TODO: Fix Stack overflow for larger mazes
     # maze_name = "300x300.bmp"
     # maze_name = "400x400.bmp"
-    # maze_name = "10x10.bmp"
 
     print(maze_name)
     main(maze_name)
