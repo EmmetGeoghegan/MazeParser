@@ -19,7 +19,7 @@ class Graph:
 
         # Initialise with no next features
         self.neighbors = []
-        self.nextNodes = []
+        self.visited = False
 
         # Give the source as the default previous node
         self.prvNode = Graph.all_Nodes[0]
@@ -36,15 +36,6 @@ class Graph:
     def AddNeighbor(self, node):
         self.neighbors.append(node)
 
-    def SetPrvNode(self, node):
-        self.prvNode = node
-
-    def SetNextNodes(self, node):
-        self.nextNodes.append(node)
-
-    def MarkForRemoval(self):
-        self.remove = 1
-
     # Pretty print node indepth info
     def nodeinfo(self):
         print("=======================================")
@@ -53,20 +44,46 @@ class Graph:
             print("Type: Source Node")
         elif self.sink > 0:
             print("Type: Sink Node")
-        elif len(self.nextNodes) == 0:
+        elif len(self.neighbors) == 0:
             print("Type: End Node")
         else:
             print("Type: Normal Node")
-        print(f"Previous Node: {self.prvNode}")
-        print(f"Next Nodes: {self.PrintNextNodes()}")
+        print(f"Neighbors: {self.neighbors}")
         print("=======================================")
 
-    # Printer helper function
-    def PrintNextNodes(self):
-        all_neighbors = ", ".join([str(i.name) for i in self.nextNodes])
-        if len(all_neighbors) == 0:
-            return("None")
-        return all_neighbors
+    # prints all not yet visited vertices
+    # reachable from s
+    def DFS_TEST(self):
+
+        # Create a stack for DFS
+        stack = []
+
+        # Push the current source node.
+        stack.append(self)
+        my_path = []
+        while (len(stack) != 0):
+
+            # Pop a vertex from stack and prit
+            node = stack.pop()
+
+            # Stack may contain same vertex twice.
+            # So we need to prthe popped item only
+            # if it is not visited.
+            if not node.visited:
+                # print(node, end=" ")
+                my_path.append(node)
+                node.visited = True
+            if node.sink == 1:
+                print("Path Found")
+                return my_path
+
+            # Get all adjacent vertices of the
+            # popped vertex s. If a adjacent has not
+            # been visited, then push it to the stack.
+            for i in node.neighbors:
+                if i.visited is False:
+                    stack.append(i)
+        return my_path
 
 
 ################################################################################
@@ -95,29 +112,25 @@ def find_whitespace(Maze):
 
 
 # Seperate the neighbors of a node into previous and next nodes O(n)
-def get_next_nodes(Node, depth, deepest):
-    # depth += 1
-    # if depth > deepest:
-    #     deepest = depth
-    #     # print(deepest)
+def get_next_nodes(Node):
     for i in Node.neighbors:
         """
         This is why we have to __init__ with prvNode as the source.
         It lets us have a link to start on, ie source to the first node
         """
-        if i.name != Node.prvNode.name:
+        if i != Node.prvNode:
             Node.nextNodes.append(i)
             i.prvNode = Node
             # print("Done node;", i, "Depth", depth)
             # Explore the nodes til done.
-            get_next_nodes(i, depth, deepest)
+            get_next_nodes(i)
 
 
 # Figure out if a node is a neighbor to another node O(n^2)
 def find_node_neighbors(AllNodes):
     # Check every node against every other node
     # TODO: Investigate a way to reduce time complexity
-    print(len(AllNodes))
+    # print(len(AllNodes))
     for i in AllNodes:
         # print(f"Coords:{(i.xpos, i.ypos)} NodeID:{i}")
         # print("in row: ", Graph.row_containers[i.xpos])
@@ -168,27 +181,24 @@ def clean_graph(allNodes):
     for i in allNodes:
         # Useless check
         if len(i.neighbors) == 2:
-            # print(f"Node {i.name} is useless")
-            # print(i.prvNode, i.nextNodes)
-            # print(i.prvNode.nextNodes)
-            # print("Before", i.prvNode.nextNodes)
+            node_1 = i.neighbors[0]
+            node_2 = i.neighbors[1]
+            node_1.neighbors.append(node_2)
+            node_2.neighbors.append(node_1)
 
-            i.prvNode.nextNodes.remove(i)
-            i.prvNode.nextNodes.append(i.nextNodes[0])
-
-            # print("After", i.prvNode.nextNodes)
-
-            i.nextNodes[0].prvNode = i.prvNode
+            node_1.neighbors.remove(i)
+            node_2.neighbors.remove(i)
 
             # Conserve length
-            i.nextNodes[0].distance += i.distance
+            node_1.distance += i.distance
+            node_2.distance += i.distance
 
-            # Conserve coords of node
-            i.nextNodes[0].draw_path += i.draw_path
+            node_1.draw_path += i.draw_path
+            node_2.draw_path += i.draw_path
+
             # Clear out the node properties
             i.prvNode = None
             i.nextNodes = []
-            Graph.MarkForRemoval(i)
 
             # print(f"Node {i.name} Removed")
     # input("CLEAN OVER")
