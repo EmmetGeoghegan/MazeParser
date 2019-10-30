@@ -42,7 +42,7 @@ def main(maze_name):
     # threading.stack_size(10240000)
     # threading.stack_size(1928999000)
     start_node = cg.Graph.all_Nodes[0]
-    thread = threading.Thread(target=cg.get_next_nodes(start_node, 0))
+    thread = threading.Thread(target=cg.get_next_nodes(start_node, 0, 0))
     thread.start()
     tend = time.time()
     print(f"Done, Took {round(tend-tstart, 2)} seconds")
@@ -83,6 +83,7 @@ if __name__ == '__main__':
     sys.setrecursionlimit(19000)
     maze_name = input("Plz enter maze name: ")
     maze_name = "200x200.bmp"
+    # maze_name = "300x300.bmp"
     # maze_name = "400x400.bmp"
     # maze_name = "10x10.bmp"
 

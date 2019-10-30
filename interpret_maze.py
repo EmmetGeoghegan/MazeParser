@@ -35,6 +35,7 @@ def draw_solution(imagename, NodePaths):
                     image[k[0], k[1]] = [0, 0, 255]
 
     cv2.imwrite(f"./solns/{imagename.split('.')[0]}-solved.bmp", image)
+    print("Done!")
 
 
 def main():

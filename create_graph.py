@@ -101,9 +101,11 @@ def find_whitespace(Maze):
 
 
 # Seperate the neighbors of a node into previous and next nodes O(n)
-def get_next_nodes(Node, depth):
-    depth += 1
-
+def get_next_nodes(Node, depth, deepest):
+    # depth += 1
+    # if depth > deepest:
+    #     deepest = depth
+    #     # print(deepest)
     for i in Node.neighbors:
         """
         This is why we have to __init__ with prvNode as the source.
@@ -114,7 +116,7 @@ def get_next_nodes(Node, depth):
             i.prvNode = Node
             # print("Done node;", i, "Depth", depth)
             # Explore the nodes til done.
-            get_next_nodes(i, depth)
+            get_next_nodes(i, depth, deepest)
 
 
 # Figure out if a node is a neighbor to another node O(n^2)
