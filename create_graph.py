@@ -80,7 +80,7 @@ class Graph:
             # Get all adjacent vertices of the
             # popped vertex s. If a adjacent has not
             # been visited, then push it to the stack.
-            for i in node.neighbors:
+            for i in sorted(node.neighbors):
                 if i.visited is False:
                     stack.append(i)
         return my_path
