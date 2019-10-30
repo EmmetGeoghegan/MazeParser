@@ -26,7 +26,22 @@ def generate_text_maze(image, wall_symbol="x", path_symbol="o"):
     return maze
 
 
+# Draw the Solution on the graph
 def draw_solution(imagename, NodePaths):
+    image = cv2.imread(f".//mazes//{imagename}")
+    for i in NodePaths:
+        for j in i:
+            for k in j.draw_path:
+                if image[k[0], k[1]][0] == [0]:
+                    print("WALL DETECTED")
+                    break
+                else:
+                    image[k[0], k[1]] = [0, 0, 255]
+
+    cv2.imwrite(f"./solns/{imagename.split('.')[0]}-solved.bmp", image)
+    print("Done!")
+
+
 # Animate the solution on the graph
 def draw_gif_solution(imagename, NodePaths):
     directory = f"{os.getcwd()}\\gif"
@@ -42,6 +57,7 @@ def draw_gif_solution(imagename, NodePaths):
             image = cv2.imread(f".//mazes//{imagename}")
             for k in draw_path:
                 for l in k.draw_path:
+                    # print(l)
                     image[l[0], l[1]] = [0, 0, 255]
             outfile_name = f"./gif/{imagename.split('.')[0]}-{index}.png"
             outfile_list.append(outfile_name)
