@@ -34,52 +34,66 @@ def main(maze_name):
     print(f"Done, Took {round(tend-tstart, 2)} seconds")
     print("")
 
-    print("-----------------")
-    print("Sorting Neighbors")
-    print("-----------------")
+    print("--------")
+    print("DFS Time")
+    print("--------")
     tstart = time.time()
-    start_node = cg.Graph.all_Nodes[0]
-    cg.get_next_nodes(start_node, 0, 0)
+    dfs_path = cg.Graph.DFS_TEST(cg.Graph.all_Nodes[0])
     tend = time.time()
     print(f"Done, Took {round(tend-tstart, 2)} seconds")
     print("")
 
-    print("---------------------------")
-    print("Removing Unnecessary Nodes")
-    print("---------------------------")
+    print("-----------------------")
+    print("Drawing Squares Visited")
+    print("-----------------------")
     tstart = time.time()
-    cg.clean_graph(cg.Graph.all_Nodes)
-    cg.Graph.all_Nodes = [i for i in cg.Graph.all_Nodes if i.remove == 0]
+    im.draw_solution(maze_name, [dfs_path])
     tend = time.time()
     print(f"Done, Took {round(tend-tstart, 2)} seconds")
     print("")
 
-    print("------------------------")
-    print("DFS-ing the path to exit")
-    print("------------------------")
-    tstart = time.time()
-    paths = (cg.dfs_paths(cg.Graph.all_Nodes,
-                          cg.Graph.all_Nodes[0],
-                          cg.Graph.all_Nodes[-1]))
-    tend = time.time()
-    print(f"Done, Took {round(tend-tstart, 2)} seconds")
+    print("------------")
+    print("Creating Gif")
+    print("------------")
+    print(f"There are {len(dfs_path)} Frames to draw")
+    choice = input("Continue Y/N: ")
+    if choice == "Y":
+        tstart = time.time()
+        im.draw_gif_solution(maze_name, [dfs_path])
+        tend = time.time()
+        print(f"Done, Took {round(tend-tstart, 2)} seconds")
+        print(f"""Average frame time:
+                {round((tend-tstart)/len(dfs_path), 2)} seconds""")
     print("")
-
-    print("Drawing the maze")
-    im.draw_solution(maze_name, paths)
 
 
 if __name__ == '__main__':
     sys.setrecursionlimit(19000)
     maze_name = input("Plz enter maze name: ")
     maze_name = "10x10.bmp"
+    print(maze_name)
+    main(maze_name)
     maze_name = "20x20.bmp"
+    print(maze_name)
+    main(maze_name)
     maze_name = "100x100.bmp"
+    print(maze_name)
+    main(maze_name)
     maze_name = "200x200.bmp"
-
-    # TODO: Fix Stack overflow for larger mazes
-    # maze_name = "300x300.bmp"
-    # maze_name = "400x400.bmp"
-
+    print(maze_name)
+    main(maze_name)
+    maze_name = "300x300.bmp"
+    print(maze_name)
+    main(maze_name)
+    maze_name = "400x400.bmp"
+    print(maze_name)
+    main(maze_name)
+    maze_name = "600x600.bmp"
+    print(maze_name)
+    main(maze_name)
+    maze_name = "800x800.bmp"
+    print(maze_name)
+    main(maze_name)
+    maze_name = "1000x1000.bmp"
     print(maze_name)
     main(maze_name)
