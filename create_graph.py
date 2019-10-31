@@ -87,44 +87,21 @@ def find_whitespace(Maze):
     for i in range(len(Maze[1])):
         column_containers.append([])
     Node_ID = 0
-    while True:
-        for rownum, row in enumerate(Maze):
-            row_containers.append([])
-            for colnum, entry in enumerate(row):
-                if entry == "o":
-                    this_node = Graph([rownum, colnum], Node_ID)
-                    row_containers[rownum].append(this_node)
-                    column_containers[colnum].append(this_node)
-                    Node_ID += 1
-        break
+    for rownum, row in enumerate(Maze):
+        row_containers.append([])
+        for colnum, entry in enumerate(row):
+            if entry == "o":
+                this_node = Graph([rownum, colnum], Node_ID)
+                row_containers[rownum].append(this_node)
+                column_containers[colnum].append(this_node)
+                Node_ID += 1
     Graph.row_containers = row_containers
     Graph.column_containers = column_containers
 
 
-# Seperate the neighbors of a node into previous and next nodes O(n)
-def get_next_nodes(Node):
-    for i in Node.neighbors:
-        """
-        This is why we have to __init__ with prvNode as the source.
-        It lets us have a link to start on, ie source to the first node
-        """
-        if i != Node.prvNode:
-            Node.nextNodes.append(i)
-            i.prvNode = Node
-            # print("Done node;", i, "Depth", depth)
-            # Explore the nodes til done.
-            get_next_nodes(i)
-
-
 # Figure out if a node is a neighbor to another node O(n^2)
 def find_node_neighbors(AllNodes):
-    # Check every node against every other node
-    # TODO: Investigate a way to reduce time complexity
-    # print(len(AllNodes))
     for i in AllNodes:
-        # print(f"Coords:{(i.xpos, i.ypos)} NodeID:{i}")
-        # print("in row: ", Graph.row_containers[i.xpos])
-        # print("incol: ", Graph.column_containers[i.ypos])
         possible_nodes_x = []
         possible_nodes_y = []
         possible_nodes_x += Graph.row_containers[i.xpos - 1]
@@ -139,9 +116,9 @@ def find_node_neighbors(AllNodes):
             possible_nodes_y += Graph.column_containers[i.ypos + 1]
         except IndexError:
             pass
-
-        for j in list(set(possible_nodes_x).intersection(set(possible_nodes_y))):
-            # If not checking the same node
+            
+        valid_nodes = list(set(possible_nodes_x).intersection(set(possible_nodes_y)))
+        for j in valid_nodes:
             if i != j:
                 if abs(i.xpos-j.xpos) != abs(i.ypos-j.ypos):
                     """
@@ -153,60 +130,3 @@ def find_node_neighbors(AllNodes):
                            the checks produce our neighbors [B, D, E, G]
                     """
                     i.AddNeighbor(j)
-        # print(f"Node: {i}, Neighbors: {i.neighbors}")
-
-
-# Get all forward paths in the network O(n)
-def get_paths(Node):
-    all_paths = []
-    for i in Node.nextNodes:
-        all_paths.append([(Node.name), (i.name)])
-
-    return all_paths
-
-
-# Prune unnecessary nodes
-def clean_graph(allNodes):
-    # input("START CLEAN")
-    for i in allNodes:
-        # Useless check
-        if len(i.neighbors) == 2:
-            node_1 = i.neighbors[0]
-            node_2 = i.neighbors[1]
-            node_1.neighbors.append(node_2)
-            node_2.neighbors.append(node_1)
-
-            node_1.neighbors.remove(i)
-            node_2.neighbors.remove(i)
-
-            # Conserve length
-            node_1.distance += i.distance
-            node_2.distance += i.distance
-
-            node_1.draw_path += i.draw_path
-            node_2.draw_path += i.draw_path
-
-            # Clear out the node properties
-            i.prvNode = None
-            i.nextNodes = []
-
-            # print(f"Node {i.name} Removed")
-    # input("CLEAN OVER")
-
-
-#####################
-#   Dev Functions   #
-#####################
-
-def dfs_paths(All_Nodes, start, end, path=[]):
-    # print(path)
-    path = path + [start]
-    if start == end:
-        return [path]
-    paths = []
-    for node in start.nextNodes:
-        if node not in path:
-            newpaths = dfs_paths(All_Nodes, node, end, path)
-            for newpath in newpaths:
-                paths.append(newpath)
-    return paths

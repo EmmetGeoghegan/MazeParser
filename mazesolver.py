@@ -79,30 +79,30 @@ def main(maze_name):
 if __name__ == '__main__':
     sys.setrecursionlimit(19000)
     maze_name = input("Plz enter maze name: ")
-    maze_name = "10x10.bmp"
-    print(maze_name)
-    main(maze_name)
-    maze_name = "20x20.bmp"
-    print(maze_name)
-    main(maze_name)
+    # maze_name = "10x10.bmp"
+    # print(maze_name)
+    # main(maze_name)
+    # maze_name = "20x20.bmp"
+    # print(maze_name)
+    # main(maze_name)
     maze_name = "100x100.bmp"
     print(maze_name)
     main(maze_name)
-    maze_name = "200x200.bmp"
-    print(maze_name)
-    main(maze_name)
-    maze_name = "300x300.bmp"
-    print(maze_name)
-    main(maze_name)
-    maze_name = "400x400.bmp"
-    print(maze_name)
-    main(maze_name)
-    maze_name = "600x600.bmp"
-    print(maze_name)
-    main(maze_name)
-    maze_name = "800x800.bmp"
-    print(maze_name)
-    main(maze_name)
-    maze_name = "1000x1000.bmp"
-    print(maze_name)
-    main(maze_name)
+    # maze_name = "200x200.bmp"
+    # print(maze_name)
+    # main(maze_name)
+    # maze_name = "300x300.bmp"
+    # print(maze_name)
+    # main(maze_name)
+    # maze_name = "400x400.bmp"
+    # print(maze_name)
+    # main(maze_name)
+    # maze_name = "600x600.bmp"
+    # print(maze_name)
+    # main(maze_name)
+    # maze_name = "800x800.bmp"
+    # print(maze_name)
+    # main(maze_name)
+    # maze_name = "1000x1000.bmp"
+    # print(maze_name)
+    # main(maze_name)
