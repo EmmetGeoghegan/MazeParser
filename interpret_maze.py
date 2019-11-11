@@ -1,4 +1,7 @@
 import cv2
+from PIL import Image
+import os
+import shutil
 
 
 def generate_text_maze(image, wall_symbol="x", path_symbol="o"):
@@ -14,7 +17,8 @@ def generate_text_maze(image, wall_symbol="x", path_symbol="o"):
         for column in range(image.shape[1]):
             # Grab Pixel values and if black its a wall else path
             pixel = image[row, column]
-            if pixel[1] == 0:
+            print(pixel)
+            if pixel == [0, 0, 0]:
                 maze_row.append(wall_symbol)
             else:
                 maze_row.append(path_symbol)
@@ -23,19 +27,62 @@ def generate_text_maze(image, wall_symbol="x", path_symbol="o"):
     return maze
 
 
-def draw_solution(imagename, NodePaths):
+# Draw the Solution on the graph
+def draw_visited(imagename, NodePaths):
     image = cv2.imread(f".//mazes//{imagename}")
     for i in NodePaths:
         for j in i:
             for k in j.draw_path:
-                if image[k[0], k[1]][0] == [0]:
-                    print("WALL DETECTED")
-                    break
-                else:
-                    image[k[0], k[1]] = [0, 0, 255]
+                image[k[0], k[1]] = [0, 0, 255]
 
     cv2.imwrite(f"./solns/{imagename.split('.')[0]}-solved.bmp", image)
     print("Done!")
+
+
+# Draw the Solution on the graph
+def draw_path(imagename, NodePaths):
+    image = cv2.imread(f"./solns/{imagename.split('.')[0]}-solved.bmp")
+    for i in NodePaths:
+        for j in i:
+            for k in j.draw_path:
+                image[k[0], k[1]] = [0, 255, 0]
+
+    cv2.imwrite(f"./solns/{imagename.split('.')[0]}-solved.bmp", image)
+    print("Done!")
+
+
+# Animate the solution on the graph
+def draw_gif_solution(imagename, NodePaths):
+    directory = f"{os.getcwd()}\\gif"
+    os.mkdir(directory)
+    index = 1
+    outfile_list = []
+    for i in NodePaths:
+        while index <= len(i):
+            draw_path = []
+            for j in range(0, index, 1):
+                draw_path.append(i[j])
+            index += 1
+            image = cv2.imread(f".//mazes//{imagename}")
+            for k in draw_path:
+                for l in k.draw_path:
+                    image[l[0], l[1]] = [0, 0, 255]
+            outfile_name = f"./gif/{imagename.split('.')[0]}-{index}.png"
+            outfile_list.append(outfile_name)
+            cv2.imwrite(outfile_name, image)
+
+        images = []
+        for n in outfile_list:
+            frame = Image.open(n)
+            images.append(frame)
+
+        # Save the frames as an animated GIF
+        images[0].save(f"./gif_soln/{imagename.split('.')[0]}.gif",
+                       save_all=True,
+                       append_images=images[1:],
+                       duration=20,
+                       loop=0)
+        shutil.rmtree(directory)
 
 
 def main():
